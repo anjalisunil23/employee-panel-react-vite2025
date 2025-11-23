@@ -7,6 +7,7 @@ export default function Settings() {
 
   // Apply theme globally
   useEffect(() => {
+<<<<<<< HEAD
     const root = document.documentElement;
 
     if (theme === "dark") {
@@ -17,11 +18,23 @@ export default function Settings() {
       root.classList.remove("dark");
     }
 
+=======
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+>>>>>>> aecbad16d5ae2ad7c22fe02ecc9b97a1d72b7517
     localStorage.setItem("theme", theme);
   }, [theme]);
 
   return (
+<<<<<<< HEAD
     <div className="transition-colors duration-500 p-4 md:p-6 space-y-6 max-w-3xl mx-auto bg-gray-100 dark:bg-gray-900 min-h-screen">
+=======
+    <div className="p-4 md:p-6 space-y-6 max-w-3xl mx-auto">
+
+>>>>>>> aecbad16d5ae2ad7c22fe02ecc9b97a1d72b7517
       <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
         Settings
       </h1>
@@ -45,7 +58,11 @@ export default function Settings() {
             />
             <div className="w-12 h-7 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-all duration-300"></div>
             <div className="absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow 
+<<<<<<< HEAD
               peer-checked:translate-x-5 transition-all duration-300"></div>
+=======
+            peer-checked:translate-x-5 transition-all duration-300"></div>
+>>>>>>> aecbad16d5ae2ad7c22fe02ecc9b97a1d72b7517
           </label>
         </div>
 
@@ -139,4 +156,8 @@ export default function Settings() {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> aecbad16d5ae2ad7c22fe02ecc9b97a1d72b7517

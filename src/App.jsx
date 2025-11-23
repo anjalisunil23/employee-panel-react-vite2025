@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
@@ -14,6 +15,22 @@ import Profile from './pages/Profile';
 import Employees from './pages/Employees';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+=======
+import Sidebar from './components/Sidebar.jsx';
+import Navbar from './components/Navbar.jsx';
+import Login from './pages/Login.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+import Attendance from './pages/Attendance.jsx';
+import Appointments from './pages/Appointments.jsx';
+import Tasks from './pages/Tasks.jsx';
+import Leave from './pages/Leave.jsx';
+import Inventory from './pages/Inventory.jsx';
+import Products from './pages/Products.jsx';
+import Profile from './pages/Profile.jsx';
+import Employees from './pages/Employees.jsx';
+import Reports from './pages/Reports.jsx';
+import Settings from './pages/Settings.jsx';
+>>>>>>> aecbad16d5ae2ad7c22fe02ecc9b97a1d72b7517
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
