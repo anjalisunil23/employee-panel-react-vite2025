@@ -14,7 +14,6 @@ import {
   Bell,
   UserCog,
   SlidersHorizontal,
-  Plus
 } from "lucide-react";
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
@@ -26,7 +25,7 @@ export default function Sidebar({
   theme,
   onSetTheme,
   mobileOpen,
-  onCloseMobile
+  onCloseMobile,
 }) {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
@@ -39,8 +38,6 @@ export default function Sidebar({
     { name: "Leave Management", to: "/leave", icon: <CalendarRange size={18} /> },
     { name: "Inventory Requests", to: "/inventory", icon: <PackageSearch size={18} /> },
     { name: "Products & Services", to: "/products", icon: <Package size={18} /> },
-
-    //  ADDED NEW SETTINGS MENU
     { name: "Settings", to: "/settings", icon: <SettingsIcon size={18} /> },
   ];
 
@@ -53,12 +50,26 @@ export default function Sidebar({
     }
   }, []);
 
-  const baseClasses = `bg-white dark:bg-gray-900 border-r dark:border-gray-800 h-full ${collapsed ? "w-20" : "w-64"
-    } flex flex-col`;
+  // ⭐ STANDARD MINIMAL DASHBOARD THEME
+  const baseClasses = `
+    ${collapsed ? "w-20" : "w-64"}
+    h-full flex flex-col transition-all duration-300 ease-in-out
+    bg-white dark:bg-gray-900
+    border-r border-gray-200 dark:border-gray-800
+  `;
+
+  // ⭐ Standard NavLink design
+  const menuClass = ({ isActive }) =>
+    `flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors
+     ${
+       isActive
+         ? "bg-blue-600 text-white"
+         : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+     }`;
 
   return (
     <>
-      {/* 🟦 Mobile Overlay */}
+      {/* ⭐ MOBILE OVERLAY SIDEBAR */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 flex">
           <div
@@ -98,6 +109,7 @@ export default function Sidebar({
                     </div>
                   </div>
                 </div>
+
                 <button
                   onClick={onCloseMobile}
                   className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -106,27 +118,22 @@ export default function Sidebar({
                 </button>
               </div>
 
-              {/* 🔹 Menu */}
+              {/* Menu */}
               <nav className="mt-5 space-y-1">
                 {menu.map((m) => (
                   <NavLink
                     key={m.to}
                     to={m.to}
                     onClick={onCloseMobile}
-                    className={({ isActive }) =>
-                      `flex items-center gap-3 p-3 rounded-lg transition ${isActive
-                        ? "bg-primary text-white"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"
-                      }`
-                    }
+                    className={menuClass}
                   >
                     {m.icon}
-                    <span className="text-sm">{m.name}</span>
+                    <span>{m.name}</span>
                   </NavLink>
                 ))}
               </nav>
 
-              {/* 🌙 Toggle Switch */}
+              {/* Theme Toggle */}
               <div className="mt-8">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-300">
@@ -134,10 +141,10 @@ export default function Sidebar({
                   </span>
 
                   <div
-                    onClick={() =>
-                      onSetTheme(theme === "light" ? "dark" : "light")
-                    }
-                    className={`relative w-14 h-7 rounded-full cursor-pointer transition ${theme === "dark" ? "bg-gray-700" : "bg-gray-200"
+                    onClick={() => onSetTheme(theme === "light" ? "dark" : "light")}
+                    className={`relative w-14 h-7 rounded-full cursor-pointer 
+                      ${
+                        theme === "dark" ? "bg-gray-700" : "bg-gray-300"
                       }`}
                   >
                     <motion.div
@@ -154,7 +161,7 @@ export default function Sidebar({
                 </div>
               </div>
 
-              {/* ⚙️ Extra Settings */}
+              {/* Extra Settings */}
               <div className="mt-5 space-y-3 text-sm">
                 <button className="w-full p-2 rounded bg-gray-100 dark:bg-gray-800 flex gap-2 items-center">
                   <UserCog size={16} /> Profile Settings
@@ -171,21 +178,17 @@ export default function Sidebar({
         </div>
       )}
 
-      {/* 🖥 Desktop Sidebar */}
+      {/* ⭐ DESKTOP SIDEBAR */}
       <motion.aside
         initial={{ x: -20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         className={`${baseClasses} hidden sm:flex flex-col`}
       >
-        {/* Profile Section */}
+        {/* Profile */}
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {profile?.avatar ? (
-              <img
-                src={profile.avatar}
-                alt="avatar"
-                className="w-10 h-10 rounded-full"
-              />
+              <img src={profile.avatar} alt="avatar" className="w-10 h-10 rounded-full" />
             ) : (
               <div className="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center text-sm">
                 {profile?.name
@@ -193,6 +196,7 @@ export default function Sidebar({
                   : "EM"}
               </div>
             )}
+
             {!collapsed && (
               <div>
                 <div className="font-medium text-gray-800 dark:text-gray-100">
@@ -209,33 +213,21 @@ export default function Sidebar({
             onClick={onCollapse}
             className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
           >
-            <ChevronLeft
-              size={18}
-              className={collapsed ? "rotate-180" : ""}
-            />
+            <ChevronLeft size={18} className={collapsed ? "rotate-180" : ""} />
           </button>
         </div>
 
-        {/* Menu Items */}
+        {/* Menu */}
         <nav className="flex-1 px-2 py-4 space-y-1">
           {menu.map((m) => (
-            <NavLink
-              key={m.to}
-              to={m.to}
-              className={({ isActive }) =>
-                `flex items-center gap-3 p-3 rounded-lg transition ${isActive
-                  ? "bg-primary text-white"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                }`
-              }
-            >
+            <NavLink key={m.to} to={m.to} className={menuClass}>
               {m.icon}
               {!collapsed && <span>{m.name}</span>}
             </NavLink>
           ))}
         </nav>
 
-        {/* 🌙 Theme Toggle */}
+        {/* Theme Toggle */}
         <div className="p-4">
           <div className="flex items-center justify-between mb-2 text-gray-600 dark:text-gray-300">
             Theme
@@ -243,8 +235,8 @@ export default function Sidebar({
 
           <div
             onClick={() => onSetTheme(theme === "light" ? "dark" : "light")}
-            className={`relative w-14 h-7 rounded-full cursor-pointer transition ${theme === "dark" ? "bg-gray-700" : "bg-gray-300"
-              }`}
+            className={`relative w-14 h-7 rounded-full cursor-pointer 
+              ${theme === "dark" ? "bg-gray-700" : "bg-gray-300"}`}
           >
             <motion.div
               layout
@@ -257,9 +249,6 @@ export default function Sidebar({
               )}
             </motion.div>
           </div>
-
-
-
         </div>
       </motion.aside>
     </>

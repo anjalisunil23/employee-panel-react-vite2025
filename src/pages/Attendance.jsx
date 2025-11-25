@@ -13,7 +13,6 @@ import {
   Legend
 } from 'recharts';
 
-// Sample weekly attendance summary
 const attendanceData = [
   { day: 'Mon', present: 20, absent: 5 },
   { day: 'Tue', present: 22, absent: 3 },
@@ -23,39 +22,10 @@ const attendanceData = [
   { day: 'Sat', present: 24, absent: 2 },
 ];
 
-// Attendance Calendar (Dummy Monthly Attendance)
-const monthlyAttendance = [
-  { day: 1, status: "P" },
-  { day: 2, status: "A" },
-  { day: 3, status: "P" },
-  { day: 4, status: "P" },
-  { day: 5, status: "A" },
-  { day: 6, status: "P" },
-  { day: 7, status: "P" },
-  { day: 8, status: "A" },
-  { day: 9, status: "P" },
-  { day: 10, status: "P" },
-  { day: 11, status: "A" },
-  { day: 12, status: "P" },
-  { day: 13, status: "P" },
-  { day: 14, status: "A" },
-  { day: 15, status: "P" },
-  { day: 16, status: "P" },
-  { day: 17, status: "A" },
-  { day: 18, status: "P" },
-  { day: 19, status: "P" },
-  { day: 20, status: "P" },
-  { day: 21, status: "A" },
-  { day: 22, status: "P" },
-  { day: 23, status: "P" },
-  { day: 24, status: "A" },
-  { day: 25, status: "P" },
-  { day: 26, status: "P" },
-  { day: 27, status: "P" },
-  { day: 28, status: "A" },
-  { day: 29, status: "P" },
-  { day: 30, status: "P" },
-];
+const monthlyAttendance = Array.from({ length: 30 }, (_, i) => ({
+  day: i + 1,
+  status: Math.random() > 0.2 ? "P" : "A",
+}));
 
 const appointmentData = [
   { name: 'Haircut', value: 10 },
@@ -67,49 +37,48 @@ const appointmentData = [
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 export default function Attendance() {
-
   const totalPresent = monthlyAttendance.filter(d => d.status === "P").length;
   const totalAbsent = monthlyAttendance.filter(d => d.status === "A").length;
   const workingDays = monthlyAttendance.length;
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">Attendance</h1>
+    <div className="p-3 md:p-6 bg-gray-100 dark:bg-gray-900 min-h-screen space-y-6">
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-          <h2 className="text-gray-500 dark:text-gray-300">Working Days</h2>
-          <p className="text-2xl font-semibold text-gray-800 dark:text-gray-100">{workingDays}</p>
-        </div>
+      {/* PAGE TITLE */}
+      <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100">
+        Attendance
+      </h1>
 
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-          <h2 className="text-gray-500 dark:text-gray-300">Present Days</h2>
-          <p className="text-2xl font-semibold text-green-600">{totalPresent}</p>
-        </div>
-
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-          <h2 className="text-gray-500 dark:text-gray-300">Absent Days</h2>
-          <p className="text-2xl font-semibold text-red-600">{totalAbsent}</p>
-        </div>
-
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-          <h2 className="text-gray-500 dark:text-gray-300">Attendance %</h2>
-          <p className="text-2xl font-semibold text-blue-600">
-            {((totalPresent / workingDays) * 100).toFixed(1)}%
-          </p>
-        </div>
+      {/* SUMMARY CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { title: "Working Days", value: workingDays, color: "text-gray-800 dark:text-gray-100" },
+          { title: "Present Days", value: totalPresent, color: "text-green-600 dark:text-green-400" },
+          { title: "Absent Days", value: totalAbsent, color: "text-red-600 dark:text-red-400" },
+          { title: "Attendance %", value: ((totalPresent / workingDays) * 100).toFixed(1) + "%", color: "text-blue-600 dark:text-blue-400" },
+        ].map((card, i) => (
+          <div
+            key={i}
+            className="p-3 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700"
+          >
+            <h2 className="text-xs text-gray-500 dark:text-gray-300">{card.title}</h2>
+            <p className={`text-lg font-semibold ${card.color}`}>{card.value}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Calendar Attendance Report */}
-      <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow mb-6">
-        <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Monthly Attendance Report</h2>
+      {/* MONTHLY GRID */}
+      <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
+        <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
+          Monthly Attendance Report
+        </h2>
 
-        <div className="grid grid-cols-7 gap-2">
-          {monthlyAttendance.map((day) => (
+        {/* MOBILE GRID FIX: 4 columns on smallest screens */}
+        <div className="grid grid-cols-4 sm:grid-cols-7 md:grid-cols-10 gap-2">
+          {monthlyAttendance.map(day => (
             <div
               key={day.day}
-              className={`p-3 text-center rounded-lg text-white font-bold ${
+              className={`p-2 text-center rounded-lg font-bold text-white text-xs ${
                 day.status === "P" ? "bg-green-500" : "bg-red-500"
               }`}
             >
@@ -119,7 +88,7 @@ export default function Attendance() {
         </div>
 
         {/* Legend */}
-        <div className="flex justify-center gap-6 mt-4 text-sm">
+        <div className="flex flex-wrap justify-center gap-4 mt-4 text-sm text-gray-700 dark:text-gray-300">
           <div className="flex items-center gap-2">
             <span className="h-4 w-4 bg-green-500 rounded"></span> Present
           </div>
@@ -129,44 +98,57 @@ export default function Attendance() {
         </div>
       </div>
 
-      {/* Weekly Attendance Chart */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Weekly Attendance</h2>
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={attendanceData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
-              <XAxis dataKey="day" stroke="#8884d8" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="present" stroke="#0088FE" strokeWidth={2} />
-              <Line type="monotone" dataKey="absent" stroke="#FF8042" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
+      {/* CHARTS SECTION */}
+      <div className="flex flex-col md:flex-row gap-6">
+
+        {/* LINE CHART */}
+        <div className="flex-1 p-4 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
+          <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
+            Weekly Attendance
+          </h2>
+
+          {/* Horizontal scroll on mobile */}
+          <div className="min-w-[500px] md:min-w-0 h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={attendanceData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#666" />
+                <XAxis dataKey="day" stroke="#999" />
+                <YAxis stroke="#999" />
+                <Tooltip contentStyle={{ backgroundColor: '#111827', border: 'none', color: '#fff', borderRadius: 6 }} />
+                <Line type="monotone" dataKey="present" stroke="#0088FE" strokeWidth={2} />
+                <Line type="monotone" dataKey="absent" stroke="#FF8042" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-        {/* Appointment Chart */}
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Appointments by Service</h2>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={appointmentData}
-                dataKey="value"
-                nameKey="name"
-                outerRadius={80}
-                label
-              >
-                {appointmentData.map((entry, index) => (
-                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
+        {/* PIE CHART */}
+        <div className="flex-1 p-4 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
+            Appointments by Service
+          </h2>
+
+          <div className="w-full h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={appointmentData}
+                  dataKey="value"
+                  nameKey="name"
+                  outerRadius={80}
+                  label={{ fill: '#fff', fontSize: 12 }}
+                >
+                  {appointmentData.map((entry, index) => (
+                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Legend wrapperStyle={{ color: '#d1d5db' }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
+
       </div>
-
     </div>
   );
 }

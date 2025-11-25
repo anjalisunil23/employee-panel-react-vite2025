@@ -2,6 +2,21 @@ import React, { useState } from "react";
 import { CalendarDays, Send } from "lucide-react";
 
 export default function LeaveManagement() {
+  // -----------------------------
+  // 🌿 Local Dummy Leave Types
+  // -----------------------------
+  const leaveTypes = [
+    { id: 1, name: "Sick Leave", allowed_days: 10 },
+    { id: 2, name: "Casual Leave", allowed_days: 12 },
+    { id: 3, name: "Paid Leave", allowed_days: 15 },
+  ];
+
+  // -----------------------------
+  // 🌿 Local State
+  // -----------------------------
+  const [myLeaves, setMyLeaves] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const [leaveForm, setLeaveForm] = useState({
     type: "",
     from: "",
@@ -9,145 +24,161 @@ export default function LeaveManagement() {
     reason: "",
   });
 
-  const [myLeaves, setMyLeaves] = useState([
-    {
-      id: 1,
-      type: "Sick Leave",
-      from: "2025-01-05",
-      to: "2025-01-06",
-      reason: "Fever and cold",
-      status: "Approved",
-    },
-    {
-      id: 2,
-      type: "Casual Leave",
-      from: "2025-01-10",
-      to: "2025-01-11",
-      reason: "Personal work",
-      status: "Pending",
-    },
-  ]);
-
+  // -----------------------------
+  // 🌿 Submit Leave (Frontend Only)
+  // -----------------------------
   const submitLeave = () => {
     if (!leaveForm.type || !leaveForm.from || !leaveForm.to || !leaveForm.reason) {
       alert("Please fill all fields");
       return;
     }
 
+    setLoading(true);
+
     const newLeave = {
       id: Date.now(),
-      ...leaveForm,
-      status: "Pending", // employee can't approve
+      leave_type: leaveTypes.find((t) => t.id === Number(leaveForm.type)).name,
+      from_date: leaveForm.from,
+      to_date: leaveForm.to,
+      reason: leaveForm.reason,
+      status: "Pending",
     };
 
-    setMyLeaves([...myLeaves, newLeave]);
-    setLeaveForm({ type: "", from: "", to: "", reason: "" });
-    alert("Leave request submitted!");
+    setTimeout(() => {
+      setMyLeaves([...myLeaves, newLeave]);
+
+      setLeaveForm({ type: "", from: "", to: "", reason: "" });
+
+      setLoading(false);
+      alert("Leave request submitted!");
+    }, 800);
   };
 
   return (
-    <div className="space-y-10">
-      <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+    <div className="space-y-6 p-4 sm:p-6 bg-gray-100 dark:bg-gray-900 min-h-screen">
+
+      {/* Title */}
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100">
         Leave Management
       </h1>
 
       {/* Apply Leave */}
-      <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold flex items-center gap-2 mb-4">
+      <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+        <h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2 mb-4 text-gray-800 dark:text-gray-100">
           <CalendarDays size={20} /> Apply for Leave
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Leave Types */}
           <div>
-            <label className="text-sm font-medium">Leave Type</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Leave Type
+            </label>
             <select
-              className="w-full p-2 mt-1 rounded-md border bg-gray-50 dark:bg-gray-900 dark:border-gray-600"
+              className="w-full p-2 mt-1 rounded-md border bg-gray-50 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
               value={leaveForm.type}
-              onChange={(e) =>
-                setLeaveForm({ ...leaveForm, type: e.target.value })
-              }
+              onChange={(e) => setLeaveForm({ ...leaveForm, type: e.target.value })}
             >
               <option value="">Select Type</option>
-              <option value="Sick Leave">Sick Leave</option>
-              <option value="Casual Leave">Casual Leave</option>
-              <option value="Paid Leave">Paid Leave</option>
+              {leaveTypes.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {type.name} ({type.allowed_days} days)
+                </option>
+              ))}
             </select>
           </div>
 
+          {/* From */}
           <div>
-            <label className="text-sm font-medium">From</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              From
+            </label>
             <input
               type="date"
-              className="w-full p-2 mt-1 rounded-md border bg-gray-50 dark:bg-gray-900 dark:border-gray-600"
+              className="w-full p-2 mt-1 rounded-md border bg-gray-50 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
               value={leaveForm.from}
-              onChange={(e) =>
-                setLeaveForm({ ...leaveForm, from: e.target.value })
-              }
+              onChange={(e) => setLeaveForm({ ...leaveForm, from: e.target.value })}
             />
           </div>
 
+          {/* To */}
           <div>
-            <label className="text-sm font-medium">To</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              To
+            </label>
             <input
               type="date"
-              className="w-full p-2 mt-1 rounded-md border bg-gray-50 dark:bg-gray-900 dark:border-gray-600"
+              className="w-full p-2 mt-1 rounded-md border bg-gray-50 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
               value={leaveForm.to}
-              onChange={(e) =>
-                setLeaveForm({ ...leaveForm, to: e.target.value })
-              }
+              onChange={(e) => setLeaveForm({ ...leaveForm, to: e.target.value })}
             />
           </div>
 
-          <div className="md:col-span-2">
-            <label className="text-sm font-medium">Reason</label>
+          {/* Reason */}
+          <div className="sm:col-span-2">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Reason
+            </label>
             <textarea
-              className="w-full p-2 mt-1 rounded-md border bg-gray-50 dark:bg-gray-900 dark:border-gray-600"
+              className="w-full p-2 mt-1 rounded-md border bg-gray-50 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
               rows={3}
               value={leaveForm.reason}
-              onChange={(e) =>
-                setLeaveForm({ ...leaveForm, reason: e.target.value })
-              }
+              onChange={(e) => setLeaveForm({ ...leaveForm, reason: e.target.value })}
             ></textarea>
           </div>
         </div>
 
+        {/* Submit Button */}
         <button
           onClick={submitLeave}
-          className="mt-4 px-5 py-2 bg-blue-600 text-white flex items-center gap-2 rounded-md hover:bg-blue-700"
+          disabled={loading}
+          className="mt-4 w-full sm:w-auto px-6 py-2 bg-blue-600 text-white flex items-center justify-center gap-2 rounded-md hover:bg-blue-700 disabled:bg-blue-400"
         >
-          <Send size={18} /> Submit Leave
+          <Send size={18} />
+          {loading ? "Submitting..." : "Submit Leave"}
         </button>
       </div>
 
-      {/* My Leave Status */}
-      <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold mb-4">My Leave Requests</h2>
+      {/* My Leaves */}
+      <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+        <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
+          My Leave Requests
+        </h2>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
+          {myLeaves.length === 0 && (
+            <p className="text-gray-600 dark:text-gray-400">No leave records yet.</p>
+          )}
+
           {myLeaves.map((leave) => (
             <div
               key={leave.id}
-              className="p-4 rounded-lg border bg-gray-50 dark:bg-gray-900"
+              className="p-4 rounded-lg border bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700"
             >
-              <p className="font-semibold">{leave.type}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {leave.from} → {leave.to}
+              <p className="font-semibold text-gray-800 dark:text-gray-100">
+                {leave.leave_type}
               </p>
-              <p className="text-sm">Reason: {leave.reason}</p>
 
-              <p className="text-sm mt-1">
-                Status:{" "}
+              <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <span>
+                  {leave.from_date} → {leave.to_date}
+                </span>
+
                 <span
                   className={`font-semibold ${
                     leave.status === "Approved"
-                      ? "text-green-600"
+                      ? "text-green-600 dark:text-green-400"
                       : leave.status === "Rejected"
-                      ? "text-red-600"
-                      : "text-yellow-600"
+                      ? "text-red-600 dark:text-red-400"
+                      : "text-yellow-600 dark:text-yellow-400"
                   }`}
                 >
                   {leave.status}
                 </span>
+              </div>
+
+              <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">
+                Reason: {leave.reason}
               </p>
             </div>
           ))}

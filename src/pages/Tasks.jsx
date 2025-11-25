@@ -69,21 +69,14 @@ export default function Tasks() {
 
   return (
     <div className="p-6 space-y-6">
-
       {/* Title */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-100">
-            Tasks
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300">Assign and track tasks for employees.</p>
-        </div>
-
-        
+      <div>
+        <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-100">Tasks</h1>
+        <p className="text-gray-600 dark:text-gray-300">Assign and track tasks for employees.</p>
       </div>
 
-      {/* Tasks Table */}
-      <div className="overflow-x-auto">
+      {/* DESKTOP TABLE VIEW */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full border-collapse bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow">
           <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
             <tr>
@@ -123,6 +116,34 @@ export default function Tasks() {
         </table>
       </div>
 
+      {/* MOBILE CARD VIEW */}
+      <div className="md:hidden space-y-4">
+        {tasks.map((t) => (
+          <div
+            key={t.id}
+            className="p-4 bg-white dark:bg-gray-900 shadow rounded-xl space-y-3"
+          >
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{t.title}</h3>
+              {getPriorityBadge(t.priority)}
+            </div>
+
+            <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+              <div className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900 flex items-center justify-center">
+                <User size={16} />
+              </div>
+              <span className="font-medium">{t.employee}</span>
+            </div>
+
+            <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+              <Calendar size={16} />
+              {t.due}
+            </div>
+
+            <div>{getStatusBadge(t.status)}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

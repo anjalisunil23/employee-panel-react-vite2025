@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
@@ -15,22 +14,6 @@ import Profile from './pages/Profile';
 import Employees from './pages/Employees';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
-=======
-import Sidebar from './components/Sidebar.jsx';
-import Navbar from './components/Navbar.jsx';
-import Login from './pages/Login.jsx';
-import Dashboard from './pages/Dashboard.jsx';
-import Attendance from './pages/Attendance.jsx';
-import Appointments from './pages/Appointments.jsx';
-import Tasks from './pages/Tasks.jsx';
-import Leave from './pages/Leave.jsx';
-import Inventory from './pages/Inventory.jsx';
-import Products from './pages/Products.jsx';
-import Profile from './pages/Profile.jsx';
-import Employees from './pages/Employees.jsx';
-import Reports from './pages/Reports.jsx';
-import Settings from './pages/Settings.jsx';
->>>>>>> aecbad16d5ae2ad7c22fe02ecc9b97a1d72b7517
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
@@ -41,6 +24,7 @@ function App() {
   const handleCollapse = () => setCollapsed(!collapsed);
   const handleNavigate = () => window.scrollTo(0, 0);
 
+  // 1. Theme initialization logic (Runs once on mount)
   useEffect(() => {
     const stored = localStorage.getItem('theme');
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -50,11 +34,14 @@ function App() {
     else document.documentElement.classList.remove('dark');
   }, []);
 
-  const toggleTheme = () => {
-    const next = theme === 'light' ? 'dark' : 'light';
-    setTheme(next);
-    localStorage.setItem('theme', next);
-    if (next === 'dark') document.documentElement.classList.add('dark');
+  // 2. NEW: Function to handle theme change from Sidebar
+  // This takes the desired next theme string ('light' or 'dark') from the Sidebar
+  const handleSetTheme = (nextTheme) => {
+    setTheme(nextTheme);
+    localStorage.setItem('theme', nextTheme);
+    
+    // Apply DOM class change
+    if (nextTheme === 'dark') document.documentElement.classList.add('dark');
     else document.documentElement.classList.remove('dark');
   };
 
@@ -80,7 +67,15 @@ function App() {
 
     return (
       <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-        <Sidebar collapsed={collapsed} onCollapse={handleCollapse} onNavigate={handleNavigate} theme={theme} onSetTheme={setTheme} mobileOpen={mobileOpen} onCloseMobile={closeMobile} />
+        <Sidebar 
+          collapsed={collapsed} 
+          onCollapse={handleCollapse} 
+          onNavigate={handleNavigate} 
+          theme={theme} 
+          onSetTheme={handleSetTheme} // <-- CORRECTED PROP HERE
+          mobileOpen={mobileOpen} 
+          onCloseMobile={closeMobile} 
+        />
 
         <div className="flex-1 flex flex-col">
           <Navbar onLogout={handleLogout} onOpenMenu={openMobile} />
