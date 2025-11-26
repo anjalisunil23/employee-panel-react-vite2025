@@ -109,7 +109,7 @@ export default function Attendance() {
 
           {/* AUTO SCROLL ON SMALL SCREENS */}
           <div className="overflow-x-auto">
-            <div className="min-w-[300px] h-64">
+            <div className="min-w-[200px] h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={attendanceData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#666" />

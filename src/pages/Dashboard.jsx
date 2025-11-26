@@ -81,7 +81,7 @@ export default function Dashboard() {
           </h2>
 
           {/* Mobile horizontal scroll support */}
-          <div className="w-[600px] md:w-full">
+          <div className="w-[300px] md:w-full">
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={attendanceData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#4B5563" />
