@@ -10,10 +10,6 @@ import {
   ChevronLeft,
   Sun,
   Moon,
-  Settings as SettingsIcon,
-  Bell,
-  UserCog,
-  SlidersHorizontal,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
@@ -38,42 +34,42 @@ export default function Sidebar({
     { name: "Leave Management", to: "/leave", icon: <CalendarRange size={18} /> },
     { name: "Inventory Requests", to: "/inventory", icon: <PackageSearch size={18} /> },
     { name: "Products & Services", to: "/products", icon: <Package size={18} /> },
-    { name: "Settings", to: "/settings", icon: <SettingsIcon size={18} /> },
   ];
 
+  // Load Profile
   useEffect(() => {
     try {
       const cp = JSON.parse(localStorage.getItem("currentProfile"));
       if (cp) setProfile(cp);
-    } catch (e) {
+    } catch {
       setProfile(null);
     }
   }, []);
 
-  // ⭐ STANDARD MINIMAL DASHBOARD THEME
+  // Base styling
   const baseClasses = `
     ${collapsed ? "w-20" : "w-64"}
     h-full flex flex-col transition-all duration-300 ease-in-out
-    bg-white dark:bg-gray-900
-    border-r border-gray-200 dark:border-gray-800
+    bg-gray-900 text-white
+    border-r border-gray-800
   `;
 
-  // ⭐ Standard NavLink design
+  // Menu button classes
   const menuClass = ({ isActive }) =>
     `flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors
      ${
        isActive
          ? "bg-blue-600 text-white"
-         : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+         : "text-gray-300 hover:bg-gray-800"
      }`;
 
   return (
     <>
-      {/* ⭐ MOBILE OVERLAY SIDEBAR */}
+      {/* 🌙 MOBILE SIDEBAR */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 flex">
           <div
-            className="fixed inset-0 bg-black/40"
+            className="fixed inset-0 bg-black/50"
             onClick={() => onCloseMobile && onCloseMobile()}
           />
 
@@ -84,27 +80,21 @@ export default function Sidebar({
             className={`${baseClasses} w-64 z-50`}
           >
             <div className="overflow-y-auto h-full p-4">
-              {/* Profile Header */}
+
+              {/* Profile */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  {profile?.avatar ? (
-                    <img
-                      src={profile.avatar}
-                      alt="avatar"
-                      className="w-10 h-10 rounded-full"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-sm font-semibold">
-                      {profile?.name
-                        ? profile.name.split(" ").map((n) => n[0]).join("")
-                        : "EM"}
-                    </div>
-                  )}
+                  <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-sm">
+                    {profile?.name
+                      ? profile.name.split(" ").map((n) => n[0]).join("")
+                      : "EM"}
+                  </div>
+
                   <div>
-                    <div className="font-medium text-gray-800 dark:text-gray-100">
+                    <div className="font-medium text-white">
                       {profile?.name || "Employee"}
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                    <div className="text-xs text-gray-400">
                       {profile?.role || "Role"}
                     </div>
                   </div>
@@ -112,7 +102,7 @@ export default function Sidebar({
 
                 <button
                   onClick={onCloseMobile}
-                  className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="p-2 rounded hover:bg-gray-700"
                 >
                   ✕
                 </button>
@@ -134,51 +124,34 @@ export default function Sidebar({
               </nav>
 
               {/* Theme Toggle */}
-              <div className="mt-8">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-300">
-                    Theme
-                  </span>
-
-                  <div
-                    onClick={() => onSetTheme(theme === "light" ? "dark" : "light")}
-                    className={`relative w-14 h-7 rounded-full cursor-pointer 
-                      ${
-                        theme === "dark" ? "bg-gray-700" : "bg-gray-300"
-                      }`}
-                  >
-                    <motion.div
-                      layout
-                      className="absolute top-1 left-1 w-5 h-5 bg-white dark:bg-black rounded-full flex items-center justify-center shadow"
-                    >
-                      {theme === "light" ? (
-                        <Sun size={14} className="text-yellow-500" />
-                      ) : (
-                        <Moon size={14} className="text-blue-400" />
-                      )}
-                    </motion.div>
-                  </div>
+              <div className="mt-6 border-t border-gray-800 pt-4">
+                <div className="flex items-center justify-between text-gray-300">
+                  Theme
                 </div>
-              </div>
 
-              {/* Extra Settings */}
-              <div className="mt-5 space-y-3 text-sm">
-                <button className="w-full p-2 rounded bg-gray-100 dark:bg-gray-800 flex gap-2 items-center">
-                  <UserCog size={16} /> Profile Settings
-                </button>
-                <button className="w-full p-2 rounded bg-gray-100 dark:bg-gray-800 flex gap-2 items-center">
-                  <Bell size={16} /> Notification Settings
-                </button>
-                <button className="w-full p-2 rounded bg-gray-100 dark:bg-gray-800 flex gap-2 items-center">
-                  <SlidersHorizontal size={16} /> Preferences
-                </button>
+                <div
+                  onClick={() => onSetTheme(theme === "light" ? "dark" : "light")}
+                  className={`relative w-14 h-7 rounded-full cursor-pointer mt-2
+                    ${theme === "dark" ? "bg-gray-700" : "bg-gray-300"}`}
+                >
+                  <motion.div
+                    layout
+                    className="absolute top-1 left-1 w-5 h-5 bg-black rounded-full flex items-center justify-center shadow"
+                  >
+                    {theme === "light" ? (
+                      <Sun size={14} className="text-yellow-400" />
+                    ) : (
+                      <Moon size={14} className="text-blue-300" />
+                    )}
+                  </motion.div>
+                </div>
               </div>
             </div>
           </motion.aside>
         </div>
       )}
 
-      {/* ⭐ DESKTOP SIDEBAR */}
+      {/* 🌙 DESKTOP SIDEBAR */}
       <motion.aside
         initial={{ x: -20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -187,22 +160,18 @@ export default function Sidebar({
         {/* Profile */}
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {profile?.avatar ? (
-              <img src={profile.avatar} alt="avatar" className="w-10 h-10 rounded-full" />
-            ) : (
-              <div className="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center text-sm">
-                {profile?.name
-                  ? profile.name.split(" ").map((n) => n[0]).join("")
-                  : "EM"}
-              </div>
-            )}
+            <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-sm">
+              {profile?.name
+                ? profile.name.split(" ").map((n) => n[0]).join("")
+                : "EM"}
+            </div>
 
             {!collapsed && (
               <div>
-                <div className="font-medium text-gray-800 dark:text-gray-100">
+                <div className="font-medium text-white">
                   {profile?.name || "Employee"}
                 </div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">
+                <div className="text-xs text-gray-400">
                   {profile?.role || "Role"}
                 </div>
               </div>
@@ -211,7 +180,7 @@ export default function Sidebar({
 
           <button
             onClick={onCollapse}
-            className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="p-2 rounded hover:bg-gray-800"
           >
             <ChevronLeft size={18} className={collapsed ? "rotate-180" : ""} />
           </button>
@@ -228,24 +197,24 @@ export default function Sidebar({
         </nav>
 
         {/* Theme Toggle */}
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-2 text-gray-600 dark:text-gray-300">
+        <div className="p-4 border-t border-gray-800">
+          <div className="flex items-center justify-between text-gray-300 mb-2">
             Theme
           </div>
 
           <div
             onClick={() => onSetTheme(theme === "light" ? "dark" : "light")}
-            className={`relative w-14 h-7 rounded-full cursor-pointer 
+            className={`relative w-14 h-7 rounded-full cursor-pointer
               ${theme === "dark" ? "bg-gray-700" : "bg-gray-300"}`}
           >
             <motion.div
               layout
-              className="absolute top-1 left-1 w-5 h-5 bg-white dark:bg-black rounded-full flex items-center justify-center shadow"
+              className="absolute top-1 left-1 w-5 h-5 bg-black rounded-full flex items-center justify-center shadow"
             >
               {theme === "light" ? (
-                <Sun size={14} className="text-yellow-500" />
+                <Sun size={14} className="text-yellow-400" />
               ) : (
-                <Moon size={14} className="text-blue-400" />
+                <Moon size={14} className="text-blue-300" />
               )}
             </motion.div>
           </div>

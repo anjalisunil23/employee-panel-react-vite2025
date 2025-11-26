@@ -42,7 +42,7 @@ export default function Attendance() {
   const workingDays = monthlyAttendance.length;
 
   return (
-    <div className="p-3 md:p-6 bg-gray-100 dark:bg-gray-900 min-h-screen space-y-6">
+    <div className="p-4 md:p-6 bg-gray-100 dark:bg-gray-900 min-h-screen space-y-6">
 
       {/* PAGE TITLE */}
       <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100">
@@ -73,8 +73,8 @@ export default function Attendance() {
           Monthly Attendance Report
         </h2>
 
-        {/* MOBILE GRID FIX: 4 columns on smallest screens */}
-        <div className="grid grid-cols-4 sm:grid-cols-7 md:grid-cols-10 gap-2">
+        {/* MOBILE OPTIMIZED GRID */}
+        <div className="grid grid-cols-5 sm:grid-cols-7 md:grid-cols-10 gap-2">
           {monthlyAttendance.map(day => (
             <div
               key={day.day}
@@ -99,26 +99,28 @@ export default function Attendance() {
       </div>
 
       {/* CHARTS SECTION */}
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="space-y-6 md:space-y-0 md:flex md:gap-6">
 
         {/* LINE CHART */}
-        <div className="flex-1 p-4 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
+        <div className="flex-1 p-4 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
             Weekly Attendance
           </h2>
 
-          {/* Horizontal scroll on mobile */}
-          <div className="min-w-[500px] md:min-w-0 h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={attendanceData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#666" />
-                <XAxis dataKey="day" stroke="#999" />
-                <YAxis stroke="#999" />
-                <Tooltip contentStyle={{ backgroundColor: '#111827', border: 'none', color: '#fff', borderRadius: 6 }} />
-                <Line type="monotone" dataKey="present" stroke="#0088FE" strokeWidth={2} />
-                <Line type="monotone" dataKey="absent" stroke="#FF8042" strokeWidth={2} />
-              </LineChart>
-            </ResponsiveContainer>
+          {/* AUTO SCROLL ON SMALL SCREENS */}
+          <div className="overflow-x-auto">
+            <div className="min-w-[300px] h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={attendanceData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#666" />
+                  <XAxis dataKey="day" stroke="#999" />
+                  <YAxis stroke="#999" />
+                  <Tooltip contentStyle={{ backgroundColor: '#111827', border: 'none', color: '#fff', borderRadius: 6 }} />
+                  <Line type="monotone" dataKey="present" stroke="#0088FE" strokeWidth={2} />
+                  <Line type="monotone" dataKey="absent" stroke="#FF8042" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
 
