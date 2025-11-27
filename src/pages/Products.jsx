@@ -5,10 +5,10 @@ export default function Products() {
   const products = stored.length
     ? stored
     : [
-        { id: 1, name: 'Shampoo', price: 12.99 },
-        { id: 2, name: 'Conditioner', price: 9.99 },
-        { id: 3, name: 'Haircut', price: 25.0 },
-      ];
+      { id: 1, name: 'Shampoo', price: 499 },
+      { id: 2, name: 'Conditioner', price: 399 },
+      { id: 3, name: 'Haircut', price: 299 },
+    ];
 
   return (
     <div className="p-4 md:p-6">
@@ -16,23 +16,21 @@ export default function Products() {
         Products & Services (View Only)
       </h1>
 
-      {/* Responsive grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {products.map((p) => (
           <div
             key={p.id}
-            className="p-4 bg-white dark:bg-gray-800 rounded-xl shadow-md flex justify-between items-center hover:shadow-lg transition"
+            className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm flex justify-between items-center hover:shadow transition"
           >
             <div>
-              <div className="font-semibold text-gray-800 dark:text-gray-100 text-base md:text-lg">
+              <div className="font-medium text-gray-800 dark:text-gray-100">
                 {p.name}
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                ${p.price.toFixed(2)}
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                ₹{p.price.toLocaleString('en-IN')}
               </div>
             </div>
-
-            <div className="text-xs md:text-sm text-gray-400">
+            <div className="text-xs text-gray-500 dark:text-gray-400">
               View only
             </div>
           </div>

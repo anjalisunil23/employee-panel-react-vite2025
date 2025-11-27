@@ -57,11 +57,10 @@ export default function Sidebar({
   // Menu button classes
   const menuClass = ({ isActive }) =>
     `flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors
-     ${
-       isActive
-         ? "bg-blue-600 text-white"
-         : "text-gray-300 hover:bg-gray-800"
-     }`;
+     ${isActive
+      ? "bg-blue-600 text-white"
+      : "text-gray-300 hover:bg-gray-800"
+    }`;
 
   return (
     <>
@@ -81,31 +80,34 @@ export default function Sidebar({
           >
             <div className="overflow-y-auto h-full p-4">
 
-              {/* Profile */}
+              {/* Profile with Close Button */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-sm">
-                    {profile?.name
-                      ? profile.name.split(" ").map((n) => n[0]).join("")
-                      : "EM"}
-                  </div>
+                  <button
+                    onClick={onCloseMobile}
+                    className="p-2 -ml-2 rounded-full hover:bg-gray-800 transition-colors"
+                    aria-label="Close menu"
+                  >
+                    <ChevronLeft size={20} className="text-white" />
+                  </button>
 
-                  <div>
-                    <div className="font-medium text-white">
-                      {profile?.name || "Employee"}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-sm">
+                      {profile?.name
+                        ? profile.name.split(" ").map((n) => n[0]).join("")
+                        : "EM"}
                     </div>
-                    <div className="text-xs text-gray-400">
-                      {profile?.role || "Role"}
+
+                    <div>
+                      <div className="font-medium text-white">
+                        {profile?.name || "Employee"}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {profile?.role || "Role"}
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                <button
-                  onClick={onCloseMobile}
-                  className="p-2 rounded hover:bg-gray-700"
-                >
-                  ✕
-                </button>
               </div>
 
               {/* Menu */}

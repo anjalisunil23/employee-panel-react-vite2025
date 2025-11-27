@@ -24,9 +24,9 @@ export default function Navbar({ onLogout, onOpenMenu }) {
     ">
       {/* Left */}
       <div className="flex items-center gap-3">
-        
+
         {/* Mobile Menu */}
-        <button 
+        <button
           onClick={onOpenMenu}
           className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 sm:hidden"
         >
@@ -46,7 +46,7 @@ export default function Navbar({ onLogout, onOpenMenu }) {
 
       {/* Right */}
       <div className="flex items-center gap-3">
-        
+
         {/* Notifications */}
         <button className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
           <Bell size={20} className="text-gray-700 dark:text-gray-300" />
